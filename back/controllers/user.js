@@ -52,33 +52,92 @@ exports.getAccounts = (req, res, next) => {
     try {
         const config = yaml.load(fs.readFileSync('./config.yml', 'utf8'));
 
-        const parameters = config.paths['/accounts'].get.parameters;
-        let yamlBankinVersion, yamlBankinDevice;
-        const yamlAccessToken = config.components.schemas.Access.properties.access_token.example;
-        parameters.forEach(param => {
-            if (param.name === 'Bankin-Version') {
-                yamlBankinVersion = param.schema.example;
-            } else if (param.name === 'Bankin-Device') {
-                yamlBankinDevice = param.schema.example;
-            }
-        });
-        const token = req.headers.authorization;
-
-        if (token !== yamlAccessToken ) {
+        const expectedBankinVersion = config.paths['/accounts'].get.parameters.find(param => param.name === 'Bankin-Version').schema.example;
+        const expectedBankinDevice = config.paths['/accounts'].get.parameters.find(param => param.name === 'Bankin-Device').schema.example;
+/*
+        if (req.headers['bankin-version'] !== expectedBankinVersion || req.headers['bankin-device'] !== expectedBankinDevice) {
             return res.status(401).json({ message: 'Non autorisé' });
         }
-
+*/
         const accounts = [
-            { id: 1, name: 'Compte courant' },
-            { id: 2, name: 'Livret A' },
-            { id: 3, name: 'PEA' }
+            {
+                id: 1,
+                name: 'First Account',
+                balance: 50,
+                status: 0,
+                status_code_info: 'OK',
+                updated_at: '2023-06-02T07:16:37.691Z',
+                type: 'checking',
+                is_paused: false,
+                currency_code: 'EUR',
+                item_id: 7961182,
+                bank_id: 488,
+                loan_details: {},
+                savings_details: {},
+                is_pro: false,
+                iban: '',
+                custom_name: '',
+                custom_type: '',
+                custom_is_pro: false,
+                hide: false,
+                used_for_analysis: true,
+                auto_sca_enabled: true
+            },
+            {
+                id: 2,
+                name: 'Second Account',
+                balance: 200,
+                status: 0,
+                status_code_info: 'OK',
+                updated_at: '2023-06-02T07:16:37.691Z',
+                type: 'checking',
+                is_paused: false,
+                currency_code: 'EUR',
+                item_id: 7961182,
+                bank_id: 488,
+                loan_details: {},
+                savings_details: {},
+                is_pro: false,
+                iban: '',
+                custom_name: '',
+                custom_type: '',
+                custom_is_pro: false,
+                hide: false,
+                used_for_analysis: true,
+                auto_sca_enabled: true
+            },
+            {
+                id: 3,
+                name: 'Third Account',
+                balance: 50,
+                status: 0,
+                status_code_info: 'OK',
+                updated_at: '2023-06-02T07:16:37.691Z',
+                type: 'checking',
+                is_paused: false,
+                currency_code: 'EUR',
+                item_id: 7961182,
+                bank_id: 488,
+                loan_details: {},
+                savings_details: {},
+                is_pro: false,
+                iban: '',
+                custom_name: '',
+                custom_type: '',
+                custom_is_pro: false,
+                hide: false,
+                used_for_analysis: true,
+                auto_sca_enabled: true
+            },
         ];
-
-        // Retourner la liste des comptes
-        res.status(200).json({ accounts });
+        let generalBalance = 0
+        accounts.forEach(account => {
+            generalBalance += account.balance
+        })
+        res.status(200).json({ totalBalance: generalBalance });
 
     } catch (err) {
-        console.error(err);
+        console.error('Erreur lors de la récupération des comptes :', err);
         res.status(500).json({ message: 'Erreur interne du serveur' });
     }
 };
