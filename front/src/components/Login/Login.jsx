@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios"
+import './login.css'
 
 const Login = () => {
     const navigate = useNavigate();
@@ -25,31 +26,35 @@ const Login = () => {
 
 
   return (
-    <section id='login'>
-        <form onSubmit={handleSubmit(onSubmit)}>
+    <section id='login' className='login'>
+        <form onSubmit={handleSubmit(onSubmit)} className='login_form'>
     <input
         type='text'
         name='email'
         placeholder='Email'
         {...register('email', { required: true })}
+        className='login_input'
     />
     <input
         type='password'
         name='password'
         placeholder='Mot de passe'
         {...register('password', { required: true })}
+        className='login_input'
     />
     <input
         type='text'
         name='bankinVersion'
         placeholder='Version Bankin'
         {...register('bankinVersion', { required: true })}
+        className='login_input'
     />
     <input
         type='text'
         name='bankinDevice'
         placeholder='Device Bankin'
         {...register('bankinDevice', { required: true })}
+        className='login_input'
     />
     <input type='submit' name='valider' value='Valider' />
 </form>

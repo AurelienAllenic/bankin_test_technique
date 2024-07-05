@@ -134,7 +134,8 @@ exports.getAccounts = (req, res, next) => {
         accounts.forEach(account => {
             generalBalance += account.balance
         })
-        res.status(200).json({ totalBalance: generalBalance });
+
+        res.status(200).json({ totalBalance: generalBalance, accounts: accounts});
 
     } catch (err) {
         console.error('Erreur lors de la récupération des comptes :', err);
